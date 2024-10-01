@@ -1,17 +1,10 @@
+import dotenv from "dotenv";
 import mongoose from "mongoose";
+dotenv.config()
 
-const connectDB = async () => {
-  try {
-    // Enable the query logs
-    // mongoose.set('debug', true);
-    const conn = await mongoose.connect(process.env.MONGODB_URL);
-    console.log(`MongoDB connected: ${conn.connection.host}`);
-  } catch (err) {
-    console.error(`Error: ${err.message}`);
-    console.log("error===============", err);
+// console.log("enter...")
+const dbConnectionUrl = `${process.env.DB_PORT}://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_DOMAINNAME}/${process.env.DB_NAME}`;
+mongoose.connect(dbConnectionUrl)
+  .then(() => console.log("Database successfully connected..."))
+  .catch((error) => console.error("Database connection error:", error));
 
-    process.exit(1); // Exit process with failure
-  }
-};
-
-export default connectDB;

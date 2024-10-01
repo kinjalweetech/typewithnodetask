@@ -1,17 +1,23 @@
 import { Request, Response, NextFunction } from 'express';
 
-// Middleware to validate book input
-export const validateBook = (req: Request, res: Response, next: NextFunction) => {
-  const { title, author, publishedYear } = req.body;
-  
-  if (!title || !author || !publishedYear) {
-    return res.status(400).json({ message: 'All fields are required' });
-    
-  }
-  
-  if (typeof publishedYear !== 'number') {
-    return res.status(400).json({ message: 'Published year must be a number' });
+const validateBook = (req: Request, res: Response, next: NextFunction): void => {
+  const { id, title, author, publishedYear } = req.body;
+
+  // Check if all fields are present
+  if (!id || !title || !author || !publishedYear) {
+    res.status(400).json({ message: 'All fields are required' });
+    return;
   }
 
-  next(); // Move to the next middleware/controller
+  // Check that publishedYear is a valid number
+  if (typeof publishedYear !== 'number') {
+    res.status(400).json({ message: 'Published year must be a number' });
+    return;
+  }
+
+  // If validation passes, proceed to the next middleware
+  next();
 };
+
+export default validateBook;
+
